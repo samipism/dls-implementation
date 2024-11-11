@@ -47,6 +47,19 @@ def Z_pro_u_w(params, u, w, lmda):
 
     return Z_0 * F_w * (lmda**(n_w+1)) * (1 - np.exp((-u*b)/(F_w * (lmda**n_w)))) 
 
+def Z_dls(params, u, w, lmbda):
+    G_50, b, a1, a2, a3, c1, c2, c3, c4 = params
+    
+    Z_0 = G_50/(1-np.exp(-50*b))
+    F_w = 1 + a1*w + a2*(w**2) + a3*(w**3)
+    n_w = 5 * F_w
+
+    alpha = -1 / (1+c1*(lmbda-1)*np.exp(-c2*(lmbda-1)))
+    beta = -c3*(lmbda-1)*np.exp(-c4*(lmbda-1))
+    g_u_lmbda = np.power(u/50, -(1+alpha+beta))
+
+    return Z_0 * F_w * (lmbda**(n_w+1)) * (1-np.exp((-u*b*g_u_lmbda)/F_w * (lmbda**n_w)))
+
 
 
 def calculate_loss(params, data):
