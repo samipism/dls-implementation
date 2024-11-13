@@ -32,7 +32,7 @@ def inference(params, team1_score, team2_wicktes_down, team2_overs_down, lost_ov
 
 if __name__ == '__main__':
 
-    params = 2.808e+02 , -3.020e-02,  4.440e-01, -4.038e-01,  1.082e-01
+    params = [2.808e+02 , -3.020e-02,  4.440e-01, -4.038e-01,  1.082e-01]
 
     team1_score = 309
     team2_wicktes_down = 2
@@ -48,5 +48,6 @@ if __name__ == '__main__':
     print(f"Lambda Equation solver value: {lmda_equation(lambda_val, params, team1_score)}")
 
     print(f"Team 2's target: {inference(params, team1_score, team2_wicktes_down, team2_overs_down, lost_overs_due_to_rain)}")
+
 
 
