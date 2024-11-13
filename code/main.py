@@ -56,19 +56,17 @@ def Z_dls(params, args, u, w, lmbda):
 
     alpha = -1 / (1+c1*(lmbda-1)*np.exp(-c2*(lmbda-1)))
     beta = -c3*(lmbda-1)*np.exp(-c4*(lmbda-1))
-    g_u_lmbda = np.power(u/50, -(1+alpha+beta*u))
+
+    g_u_lmbda = 0
+
+    if u != 0:
+        g_u_lmbda = np.power(u/50, -(1+alpha+beta*u))
 
     # if u != 50:
     #     print(f"{Z_0 * F_w * (lmbda**(n_w+1)) = }")
-    #     print(f"{Z_0 * F_w * (lmbda**(n_w+1))*np.exp((-u*b*g_u_lmbda)/(F_w * (lmbda**n_w))) = }")
+    #     print(f"{(1-np.exp((-u*b*g_u_lmbda)/(F_w * (lmbda**n_w)))) = }")
 
     return Z_0 * F_w * (lmbda**(n_w+1)) * (1-np.exp((-u*b*g_u_lmbda)/(F_w * (lmbda**n_w))))
-    # return Z_0 * F_w * (lmbda**(n_w+1)) - np.exp(((-u*b*g_u_lmbda)/(F_w * (lmbda**n_w)))+np.log(np.abs(Z_0 * F_w * (lmbda**(n_w+1)))))
-
-    # exponent = (-u*b*g_u_lmbda)/(F_w * (lmbda**n_w))
-    # log_val = np.log(np.abs(Z_0)) + np.log(np.abs(F_w)) + (n_w+1)*np.log(np.abs(lmbda)) + np.log(np.abs(1 - np.exp(exponent)))
-
-    # return np.exp(log_val)
 
 
 def calculate_loss(params, data):
