@@ -2,28 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import minimize, root_scalar
 
-from main import Z_std_u_w
-
-
-def equation(x, params, team1_score):
-
-    G_50, b, a1, a2, a3 = params
-
-    u, w, n0 = 50, 0, 5
-
-    Z_0 = G_50/(1 - np.exp(-50*b))
-    F_w = 1 + a1*w + a2 * (w**2) + a3 * (w**3)
-
-    n_w = n0 * F_w
-
-    return Z_0 * F_w * (x**(n_w+1)) * (1 - np.exp((-u*b)/(F_w * (x**n_w)))) - team1_score
-
-
-def calculate_lambda(params, team1_score):
-
-    solution = root_scalar(lambda x: equation(x, params, team1_score), bracket=[1,100])
-
-    return solution.root
+from main import Z_std_u_w, calculate_lambda, calculate_g, lmda_equation, g_equation
 
 
 def inference(params, team1_score, team2_wicktes_down, team2_overs_down, lost_overs_due_to_rain):
@@ -42,8 +21,10 @@ def inference(params, team1_score, team2_wicktes_down, team2_overs_down, lost_ov
     team2_target = None
 
     if R_2 <= R_1:
+        print(f"Condition satisfied: R_2 <= R_1")
         team2_target = team1_score * R_2/R_1
     else:
+        print(f"Condition satisfied: R_2 > R_1")
         team2_target = team1_score + G_50*(R_2 - R_1)
 
     return int(np.ceil(team2_target))
@@ -52,6 +33,8 @@ def inference(params, team1_score, team2_wicktes_down, team2_overs_down, lost_ov
 if __name__ == '__main__':
 
     params = [ 2.808e+02, -3.020e-02, 4.439e-01, -4.038e-01, 1.082e-01]
+
+    #params = [2.750e+02, -2.429e-01,  5.315e-02, 3.945e-02, -7.787e-03]
 
     team1_score = 287
     team2_wicktes_down = 3
@@ -64,7 +47,7 @@ if __name__ == '__main__':
 
     print(f"Lambda value: {lambda_val}")
 
-    print(f"Equation solver value: {equation(lambda_val, params, team1_score)}")
+    print(f"Lambda Equation solver value: {lmda_equation(lambda_val, params, team1_score)}")
 
     print(f"Team 2's target: {inference(params, team1_score, team2_wicktes_down, team2_overs_down, lost_overs_due_to_rain)}")
 

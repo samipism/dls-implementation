@@ -61,7 +61,6 @@ def Z_dls(params, u, w, lmbda):
     return Z_0 * F_w * (lmbda**(n_w+1)) * (1-np.exp((-u*b*g_u_lmbda)/F_w * (lmbda**n_w)))
 
 
-
 def calculate_loss(params, data):
     loss = 0
     count = 0
@@ -77,7 +76,27 @@ def calculate_loss(params, data):
     return loss / count
 
 
-def equation(x, params, team1_score):
+
+def g_equation(params, lmda):
+
+    c1, c2, c3, c4 = params
+    u = 50
+    
+    alpha_lmda = -1/(1 + c1 * (lmda-1)* np.exp(-c2*(lmda - 1)))
+    beta_lmda = -c3 * (lmda - 1) * np.exp(-c4 * (lmda - 1))
+
+    exponent = -(1 + alpha_lmda + beta_lmda * u)
+
+    g = (u/50) ** exponent
+
+    return g - 1
+
+
+def calculate_g(lmda):
+   pass
+
+
+def lmda_equation(x, params, team1_score):
 
     G_50, b, a1, a2, a3 = params
 
@@ -93,11 +112,9 @@ def equation(x, params, team1_score):
 
 def calculate_lambda(params, team1_score):
 
-    solution = root_scalar(lambda x: equation(x, params, team1_score), bracket=[1,100])
+    solution = root_scalar(lambda x: lmda_equation(x, params, team1_score), bracket=[1,100])
 
     return solution.root
-
-    
 
 
 if __name__ == '__main__':
@@ -115,16 +132,4 @@ if __name__ == '__main__':
 
     result = minimize(calculate_loss, initial_guess, args = cleaned_data, method='L-BFGS-B')
     print(f"{result = }")     
-
-
-
-
-
-
-
-
-
-
-
-
 
