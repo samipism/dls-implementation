@@ -62,38 +62,19 @@ def Z_dls(params, u, w, lmbda):
 
 
 def calculate_loss(params, data):
-    loss = 0
+    total_loss = 0
     count = 0
     for over in range(1, 50):
         for wicket in range(10):
             temp_data = data[(data['Overs.Remaining'] == over) & (data['Wickets.Down'] == wicket)]
+            z_val = Z_std_u_w(params, over, wicket)
 
             if temp_data.shape[0] > 0:
                 count += 1
-                mean_value = np.mean(temp_data['Runs.Remaining'].values)
-                loss += (mean_value - Z_std_u_w(params, over, wicket))**2
+                loss = (temp_data['Runs.Remaining'].values - z_val)**2
+                total_loss += np.mean(loss)
 
-    return loss / count
-
-
-
-def g_equation(params, lmda):
-
-    c1, c2, c3, c4 = params
-    u = 50
-    
-    alpha_lmda = -1/(1 + c1 * (lmda-1)* np.exp(-c2*(lmda - 1)))
-    beta_lmda = -c3 * (lmda - 1) * np.exp(-c4 * (lmda - 1))
-
-    exponent = -(1 + alpha_lmda + beta_lmda * u)
-
-    g = (u/50) ** exponent
-
-    return g - 1
-
-
-def calculate_g(lmda):
-   pass
+    return total_loss / count
 
 
 def lmda_equation(x, params, team1_score):

@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import minimize, root_scalar
 
-from main import Z_std_u_w, calculate_lambda, calculate_g, lmda_equation, g_equation
+from main import Z_std_u_w, calculate_lambda, lmda_equation
 
 
 def inference(params, team1_score, team2_wicktes_down, team2_overs_down, lost_overs_due_to_rain):
@@ -32,9 +32,7 @@ def inference(params, team1_score, team2_wicktes_down, team2_overs_down, lost_ov
 
 if __name__ == '__main__':
 
-    params = [ 2.808e+02, -3.020e-02, 4.439e-01, -4.038e-01, 1.082e-01]
-
-    #params = [2.750e+02, -2.429e-01,  5.315e-02, 3.945e-02, -7.787e-03]
+    params = 2.808e+02 , -3.020e-02,  4.440e-01, -4.038e-01,  1.082e-01
 
     team1_score = 287
     team2_wicktes_down = 3
