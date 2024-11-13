@@ -58,9 +58,9 @@ def Z_dls(params, args, u, w, lmbda):
     beta = -c3*(lmbda-1)*np.exp(-c4*(lmbda-1))
     g_u_lmbda = np.power(u/50, -(1+alpha+beta*u))
 
-    if u != 50:
-        print(f"{Z_0 * F_w * (lmbda**(n_w+1)) = }")
-        print(f"{(1-np.exp((-u*b*g_u_lmbda)/(F_w * (lmbda**n_w)))) = }")
+    # if u != 50:
+    #     print(f"{Z_0 * F_w * (lmbda**(n_w+1)) = }")
+    #     print(f"{Z_0 * F_w * (lmbda**(n_w+1))*np.exp((-u*b*g_u_lmbda)/(F_w * (lmbda**n_w))) = }")
 
     return Z_0 * F_w * (lmbda**(n_w+1)) * (1-np.exp((-u*b*g_u_lmbda)/(F_w * (lmbda**n_w))))
     # return Z_0 * F_w * (lmbda**(n_w+1)) - np.exp(((-u*b*g_u_lmbda)/(F_w * (lmbda**n_w)))+np.log(np.abs(Z_0 * F_w * (lmbda**(n_w+1)))))
