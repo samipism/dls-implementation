@@ -34,10 +34,10 @@ if __name__ == '__main__':
 
     params = 2.808e+02 , -3.020e-02,  4.440e-01, -4.038e-01,  1.082e-01
 
-    team1_score = 287
-    team2_wicktes_down = 3
-    team2_overs_down = 17
-    lost_overs_due_to_rain = 15
+    team1_score = 309
+    team2_wicktes_down = 2
+    team2_overs_down = 20
+    lost_overs_due_to_rain = 30
 
     lambda_val = calculate_lambda(params, team1_score)
 
