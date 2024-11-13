@@ -1,4 +1,6 @@
 # dls-implementation
-## Link for dataset
-ODI dataset: [link](https://drive.google.com/file/d/1zP3Ixz-AJXbloFZ02OnqS8ixSsQeOP9X/view?usp=sharing) \
-T20 dataset: [link](https://drive.google.com/file/d/1ynaTF1bB6gBaY2HUN2HUnyvfT4V4Aile/view?usp=sharing)
+## Dataset links
+ODI dataset: [link](https://drive.google.com/file/d/1ptHKhDNh68U5hrWtTNpDtax3DJPmCUGT/view?usp=sharing) \
+T20 dataset: [link](https://drive.google.com/file/d/1L1VSgRo_c5Vpv-MBNgk3Zdkhd2G9q-0Y/view?usp=sharing) \
+ODI dataset source: [link](https://www.kaggle.com/datasets/utkarshtomar736/odi-mens-cricket-match-data-2002-2023) \
+T20 dataset source: [link](https://www.kaggle.com/datasets/jamiewelsh2/ball-by-ball-it20)

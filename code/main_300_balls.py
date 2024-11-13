@@ -4,7 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-
 def load_data(path):
     df = pd.read_csv(path)
     return df

@@ -69,10 +69,8 @@ def inference_ODI(Z_dls_params, Z_std_params,  team1_score, team2_wicktes_down, 
 
 if __name__ == '__main__':
 
-    # Z_std_params = 2.808e+02, -3.020e-02,  4.439e-01, -4.038e-01,  1.082e-01
-    # Z_dls_params = -1.212e-01,  1.176e+00, -2.326e-02,  1.601e+00
-    Z_std_params = np.array([2.808e+02, -3.020e-02, 4.439e-01, -4.038e-01, 1.082e-01], dtype=np.longdouble)
-    Z_dls_params = np.array([-1.212e-01, 1.176e+00, -2.326e-02, 1.601e+00], dtype=np.longdouble)
+    Z_std_params = 2.808e+02, -3.020e-02,  4.439e-01, -4.038e-01,  1.082e-01
+    Z_dls_params = -1.212e-01,  1.176e+00, -2.326e-02,  1.601e+00
 
     team1_score = 350
     team2_wicktes_down = 0
@@ -84,6 +82,5 @@ if __name__ == '__main__':
     for w in [0,2,4,6,8]:
         print(f"\n\nOn {w = }")
         print(f"Team 2's target: {inference_ODI(Z_dls_params, Z_std_params, team1_score, w, team2_overs_down, lost_overs_due_to_rain)}")
-
     
     #print(f"Team 2's target: {inference_ODI(Z_dls_params, Z_std_params, team1_score, team2_wicktes_down, team2_overs_down, lost_overs_due_to_rain)}")
