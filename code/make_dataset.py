@@ -9,7 +9,10 @@ import pandas as pd
 
 # #print(df.loc[df['wicket_type'].notna()])
 
-# df['runs_from_ball'] = (df['runs_off_bat'].fillna(0)+df['extras'].fillna(0)+df['wides'].fillna(0)+df['noballs'].fillna(0)+df['byes'].fillna(0)+df['legbyes'].fillna(0)).astype(int)
+# ##df['runs_from_ball'] = (df['runs_off_bat'].fillna(0)+df['extras'].fillna(0)+df['wides'].fillna(0)+df['noballs'].fillna(0)+df['byes'].fillna(0)+df['legbyes'].fillna(0)).astype(int)
+
+# df['runs_from_ball'] = (df['runs_off_bat'].fillna(0)+df['extras'].fillna(0)).astype(int)
+
 
 # df['total_runs'] = df.groupby(['match_id', 'innings'])['runs_from_ball'].transform('sum')
 
@@ -50,40 +53,40 @@ import pandas as pd
 """ T20 dataset creation """
 
 
-df = pd.read_csv('../data/ball_by_ball_it20.csv')
+# df = pd.read_csv('../data/ball_by_ball_it20.csv')
 
-df = df.rename(columns = {'Innings':'innings', 'Ball':'ball','Runs From Ball':'runs_from_ball','Winner':'winner', 'Match ID':'match_id', 'Date':'start_date','Innings Runs':'team_score','Innings Wickets':'wickets_down','Bat First':'bat_first','Bat Second':'bat_second','Over':'over'})
+# df = df.rename(columns = {'Innings':'innings', 'Ball':'ball','Runs From Ball':'runs_from_ball','Winner':'winner', 'Match ID':'match_id', 'Date':'start_date','Innings Runs':'team_score','Innings Wickets':'wickets_down','Bat First':'bat_first','Bat Second':'bat_second','Over':'over'})
 
-df['total_runs'] = df.groupby(['match_id', 'innings'])['runs_from_ball'].transform('sum')
+# df['total_runs'] = df.groupby(['match_id', 'innings'])['runs_from_ball'].transform('sum')
 
-df['runs_remaining'] = df['total_runs'] - df['team_score']
+# df['runs_remaining'] = df['total_runs'] - df['team_score']
 
-df['start_date'] = pd.to_datetime(df['start_date'])
+# df['start_date'] = pd.to_datetime(df['start_date'])
 
-df['season'] = df['start_date'].dt.year
+# df['season'] = df['start_date'].dt.year
 
-columns_to_drop = ['Unnamed: 0', 'Venue', 'Batter','Non Striker', 'Bowler','Batter Runs', 'Extra Runs', 'Ball Rebowled', 'Extra Type', 'Method','Player Out','Wicket','Runs to Get','Balls Remaining','Chased Successfully','Total Batter Runs','Total Non Striker Runs','Batter Balls Faced','Non Striker Balls Faced','Player Out Runs','Player Out Balls Faced','Bowler Runs Conceded','Valid Ball','Target Score']
+# columns_to_drop = ['Unnamed: 0', 'Venue', 'Batter','Non Striker', 'Bowler','Batter Runs', 'Extra Runs', 'Ball Rebowled', 'Extra Type', 'Method','Player Out','Wicket','Runs to Get','Balls Remaining','Chased Successfully','Total Batter Runs','Total Non Striker Runs','Batter Balls Faced','Non Striker Balls Faced','Player Out Runs','Player Out Balls Faced','Bowler Runs Conceded','Valid Ball','Target Score']
 
-df = df.drop(columns = columns_to_drop)
-
-
-df['ball_no'] = df.groupby(['match_id', 'innings']).cumcount() + 1
-
-df['total_balls'] = df.groupby(['match_id', 'innings'])['wickets_down'].transform('size')
-
-df['balls_remaining'] = df['total_balls'] - df['ball_no']
+# df = df.drop(columns = columns_to_drop)
 
 
-inning1_scores = df[df['innings'] == 1].set_index('match_id')['total_runs'].to_dict()
-df['target_score'] = -1 
-df.loc[df['innings'] == 2, 'target_score'] = df['match_id'].map(inning1_scores) + 1
+# df['ball_no'] = df.groupby(['match_id', 'innings']).cumcount() + 1
+
+# df['total_balls'] = df.groupby(['match_id', 'innings'])['wickets_down'].transform('size')
+
+# df['balls_remaining'] = df['total_balls'] - df['ball_no']
 
 
-new_order = ['match_id','season','start_date','innings','over','ball','total_balls','balls_remaining','runs_from_ball','total_runs','team_score','runs_remaining','wickets_down','target_score','bat_first','bat_second','winner']
+# inning1_scores = df[df['innings'] == 1].set_index('match_id')['total_runs'].to_dict()
+# df['target_score'] = -1 
+# df.loc[df['innings'] == 2, 'target_score'] = df['match_id'].map(inning1_scores) + 1
 
-df = df[new_order]
 
-df.to_csv('../data/modified_T20_data.csv', index=False)
+# new_order = ['match_id','season','start_date','innings','over','ball','total_balls','balls_remaining','runs_from_ball','total_runs','team_score','runs_remaining','wickets_down','target_score','bat_first','bat_second','winner']
 
-print("done")
+# df = df[new_order]
+
+# df.to_csv('../data/modified_T20_data.csv', index=False)
+
+# print("done")
 
