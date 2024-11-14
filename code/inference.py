@@ -67,10 +67,10 @@ if __name__ == '__main__':
 
     # ODI Scenario
     print("\nODI Scenario: ")
-    team1_score = 350
-    team2_wicktes_down = 4
-    team2_overs_completed = 45
-    lost_overs_due_to_rain = 5
+    team1_score = 309
+    team2_wicktes_down = 2
+    team2_overs_completed = 20.4
+    lost_overs_due_to_rain = 50-20.4
 
     print("\nDL-STD: ",inference_ODI(Z_dls_params, Z_std_params, team1_score, team2_wicktes_down, team2_overs_completed, lost_overs_due_to_rain, method='DL-STD'))
     print("\nDL-PRO: ",inference_ODI(Z_dls_params, Z_std_params, team1_score, team2_wicktes_down, team2_overs_completed, lost_overs_due_to_rain, method='DL-PRO'))
@@ -80,10 +80,10 @@ if __name__ == '__main__':
 
     #T20I scenario
     print("\nT20I Scenario: ")
-    team1_score = 219
-    team2_wicktes_down = 3
-    team2_overs_completed = 10
-    lost_overs_due_to_rain = 5
+    team1_score = 139
+    team2_wicktes_down = 2
+    team2_overs_completed = 6.5
+    lost_overs_due_to_rain = 13.1
     print("\nDL-STD: ",inference_T20I(Z_dls_params, Z_std_params, team1_score, team2_wicktes_down, team2_overs_completed, lost_overs_due_to_rain, method='DL-STD'))
     print("\nDL-PRO: ",inference_T20I(Z_dls_params, Z_std_params, team1_score, team2_wicktes_down, team2_overs_completed, lost_overs_due_to_rain, method='DL-PRO'))
     print("\nDLS: ",inference_T20I(Z_dls_params, Z_std_params, team1_score, team2_wicktes_down, team2_overs_completed, lost_overs_due_to_rain, method='DLS'))
