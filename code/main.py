@@ -45,6 +45,7 @@ def Z_pro_u_w(params, u, w, lmda):
 
     return Z_0 * F_w * (lmda**(n_w+1)) * (1 - np.exp((-u*b)/(F_w * (lmda**n_w)))) 
 
+
 def Z_dls(params, args, u, w, lmbda):
     c1, c2, c3, c4 = params
     G_50, b, a1, a2, a3 = args
