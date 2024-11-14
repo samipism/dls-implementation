@@ -73,7 +73,6 @@ if __name__ == '__main__':
     #print(inference_ODI_final(Z_dls_params, Z_std_params, team1_score, team2_wicktes_down, team2_overs_completed, lost_overs_due_to_rain, method='DL'))
 
 
-
     #T20I scenario
     print("\nT20I Scenario: ")
     team1_score = 219

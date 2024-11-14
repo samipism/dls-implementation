@@ -13,7 +13,6 @@ import pandas as pd
 
 # df['runs_from_ball'] = (df['runs_off_bat'].fillna(0)+df['extras'].fillna(0)).astype(int)
 
-
 # df['total_runs'] = df.groupby(['match_id', 'innings'])['runs_from_ball'].transform('sum')
 
 # df['team_score'] = df.groupby(['match_id', 'innings'])['runs_from_ball'].transform('cumsum')
@@ -35,14 +34,29 @@ import pandas as pd
 # columns_to_drop = ['venue','runs_off_bat','extras','wides','noballs','byes','legbyes','penalty','player_dismissed','other_player_dismissed','other_wicket_type','striker' ,'non_striker','bowler','wicket_type','wicket_indicator']
 # df = df.drop(columns=columns_to_drop)
 
-
 # inning1_scores = df[df['innings'] == 1].set_index('match_id')['total_runs'].to_dict()
 # df['target_score'] = -1 
 # df.loc[df['innings'] == 2, 'target_score'] = df['match_id'].map(inning1_scores) + 1
 
-# new_order = ['match_id','season','start_date','innings','over','ball','total_balls','balls_remaining','runs_from_ball','total_runs','team_score','runs_remaining','wickets_down', 'target_score','batting_team','bowling_team']
+
+# bat_first_team_dict = df[df['innings'] == 1].set_index('match_id')['batting_team'].to_dict()
+# bat_second_team_dict = df[df['innings'] == 2].set_index('match_id')['batting_team'].to_dict()
+# df['bat_first'] = df['match_id'].map(bat_first_team_dict)
+# df['bat_second'] = df['match_id'].map(bat_second_team_dict)
+
+
+# new_order = ['match_id','season','start_date','innings','over','ball','total_balls','balls_remaining','runs_from_ball','total_runs','team_score','runs_remaining','wickets_down', 'target_score','bat_first','bat_second']
 # df = df[new_order]
 
+# inning1_scores = df[df['innings'] == 1].set_index('match_id')['total_runs'].to_dict()
+
+# inning2_scores = df[df['innings'] == 2].set_index('match_id')['total_runs'].to_dict()
+# df['winner'] = None
+# for match_id in inning1_scores:
+#     if inning1_scores[match_id] > inning2_scores.get(match_id, 0):
+#         df.loc[df['match_id'] == match_id, 'winner'] = df.loc[df['match_id'] == match_id, 'bat_first'].iloc[0]
+#     else:
+#         df.loc[df['match_id'] == match_id, 'winner'] = df.loc[df['match_id'] == match_id, 'bat_second'].iloc[0]
 
 # df.to_csv('../data/modified_ODI_data.csv', index=False)
 
