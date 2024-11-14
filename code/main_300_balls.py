@@ -63,6 +63,12 @@ def calculate_loss(params, data):
 #     return loss
 
 
+def calc_loss_fast(params, cleaned_data):
+    pred = Z_std_u_w(params, cleaned_data['balls_remaining'].values, cleaned_data['wickets_down'].values)
+    loss = np.sum((pred - cleaned_data["runs_remaining"])**2)/cleaned_data.shape[0]
+    return loss
+
+
 def g_equation(params, lmda):
     c1, c2, c3, c4 = params
     u = 50

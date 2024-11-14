@@ -25,8 +25,8 @@ def inference_ODI(Z_dls_params, Z_std_params,  team1_score, team2_wicktes_down, 
         P_u2_w = Z_std_u_w(Z_std_params, u_2, team2_wicktes_down)/Z_std_u_w(Z_std_params, 50, 0)
     
     elif method == 'DL-PRO':
-        P_u1_w = Z_pro_u_w(Z_std_params, u_1, team2_wicktes_down, lambda_val)/Z_pro_u_w(Z_std_params, 50, 0, 1)
-        P_u2_w = Z_pro_u_w(Z_std_params, u_2, team2_wicktes_down, lambda_val)/Z_pro_u_w(Z_std_params, 50, 0, 1)
+        P_u1_w = Z_pro_u_w(Z_std_params, u_1, team2_wicktes_down, lambda_val)/Z_pro_u_w(Z_std_params, 50, 0, lambda_val)
+        P_u2_w = Z_pro_u_w(Z_std_params, u_2, team2_wicktes_down, lambda_val)/Z_pro_u_w(Z_std_params, 50, 0, lambda_val)
     
     else:
         P_u1_w = Z_dls(Z_dls_params,Z_std_params, u_1, team2_wicktes_down, lambda_val)/Z_dls(Z_dls_params,Z_std_params, 50, 0, lambda_val)
@@ -57,14 +57,19 @@ def inference_T20I(Z_dls_params, Z_std_params,  team1_score, team2_wicktes_down,
 
 if __name__ == '__main__':
 
-    Z_dls_params = [1.101e+00,  1.540e+00, -1.404e-01 , 1.083e+01]
-    Z_std_params = [ 2.609e+02,  1.204e-02, -1.252e-01,  2.624e-03,  1.758e-04]
+    # Z_dls_params = [1.101e+00,  1.540e+00, -1.404e-01 , 1.083e+01]
+    # Z_std_params = [ 2.468e+02 , 1.253e-02, -1.391e-01 , 5.942e-03 ,-2.945e-05]
+
+    Z_dls_params = 3.216e-01 , -4.633e+00,  3.518e-02 , -2.623e-01
+
+    Z_std_params = 1.995e+02 , 3.159e-02 , -1.196e-01,  -1.748e-03 , 3.840e-04
+    #Z_std_params = 2.045e+02, 3.159e-02, -1.196e-01, -1.748e-03,  3.840e-04
 
     # ODI Scenario
     print("\nODI Scenario: ")
     team1_score = 350
-    team2_wicktes_down = 0
-    team2_overs_completed = 10
+    team2_wicktes_down = 4
+    team2_overs_completed = 45
     lost_overs_due_to_rain = 5
 
     print("\nDL-STD: ",inference_ODI(Z_dls_params, Z_std_params, team1_score, team2_wicktes_down, team2_overs_completed, lost_overs_due_to_rain, method='DL-STD'))

@@ -1,63 +1,127 @@
-from inference import *
-from main import calculate_lambda,Z_dls,Z_pro_u_w,Z_std_u_w
 import pandas as pd
 import matplotlib.pyplot as plt
 
-if __name__ == '__main__':
-    path='../data/modified_ODI_data.csv'
-    data=pd.read_csv(path)
-    data=data[['over','ball','team_score','total_runs','wickets_down','target_score','total_balls','balls_remaining','season']]
-    
-    # dls_data=data[(data['total_runs']>300 ) & ( data['target_score']!=-1) & (data['wickets_down']==0) ]
-    # dl_data=data[ (data['total_runs']<300) & (data['total_runs']>=200) & (data['target_score']!=-1) & (data['wickets_down']==0) ]
+from main import calculate_lambda, Z_dls, Z_std_u_w, load_data
 
-    dls_data=data[(data['total_runs']>300 ) & ( data['target_score']!=-1) & (data['wickets_down']==0) &(data['season']>2010) &(data['season']<2016)  ]
-    dl_data=data[ (data['total_runs']<300) & (data['total_runs']>=200) & (data['target_score']!=-1) & (data['wickets_down']==0)&(data['season']>2010) &(data['season']<2016) ]
-    print(dls_data.shape)
-    print(dl_data.shape)
-    print(dls_data['total_runs'].mean())
-    print(dl_data['total_runs'].mean())
-    dls_act=[]
-    dl_act=[]
-    for i in range(0,301):
-        dls_i=dls_data[ (dls_data['total_balls']-dls_data['balls_remaining'])==i]
-        dls_runstogo= ((dls_i['total_runs']-dls_i['team_score']) / dls_i['total_runs'])
-        dls_act.append( (dls_runstogo.mean(),(300-i)/6))
-        
-        dl_i=dl_data[(dl_data['total_balls']-dl_data['balls_remaining'])==i]
-        dl_runstogo=((  dl_i['total_runs']-dl_i['team_score']) / dl_i['total_runs'] )
-        dl_act.append((dl_runstogo.mean(),(300-i)/6))
 
-    # Z_dls_params = [1.101e+00,  1.540e+00, -1.404e-01 , 1.083e+01]
-    # Z_std_params = [ 2.609e+02,  1.204e-02, -1.252e-01,  2.624e-03,  1.758e-04]
-    Z_dls_params=[ 1.150e+00,  2.113e+00 , 9.041e-02, -4.502e-01]
-    Z_std_params=[ 2.609e+02,  1.204e-02, -1.252e-01,  2.624e-03,  1.758e-04]
-    lamda= calculate_lambda(Z_std_params,331)
-    
-    arr_dls=[]
-    arr_dl=[]
-    
-    for i in np.linspace(0,50,200):
-        arr_dls.append((Z_dls(Z_dls_params,Z_std_params,50-i,0,lamda)/Z_dls(Z_dls_params,Z_std_params,50,0,lamda),50-i))
-        arr_dl.append((Z_std_u_w(Z_std_params,50-i,0)/Z_std_u_w(Z_std_params,50,0),50-i))
 
-    y1, x1 = zip(*arr_dls)
-    y2, x2 = zip(*arr_dl)
-    y3, x3 = zip(*dls_act)
-    y4, x4 = zip(*dl_act)
+def plot_observed_vs_predicted(data, Z_std_params, Z_dls_params):
+    
+    data = data[(data['season'] >= 2010) & (data['season'] <= 2015) & (data['innings'] == 2)]
+
+    df = data.copy()
+
+    df_300_plus = df[(df['total_runs'] >= 300)]
+    grouped = df_300_plus.groupby(['match_id', 'innings'])['total_runs'].max()
+    df_300_plus_avg = grouped.mean()
+
+    lambda_val = calculate_lambda(Z_std_params, df_300_plus_avg)
+    print(f"{lambda_val = }")
+
+    x_val = []
+    y_val_dl_observed = []
+    y_val_dls_observed = []
+    y_val_dl = []
+    y_val_dls = []
+    y_val_runrate = []
+    
+
+    for ball in range(0,301):
+
+        y_val_runrate.append(ball/300)
+
+        x_val.append(ball)
+
+        temp_df = df[(df['balls_remaining'] == ball ) & (df['wickets_down'] == 0)]
+        temp_df_300_plus = df_300_plus[(df_300_plus['balls_remaining'] == ball ) & (df_300_plus['wickets_down'] == 0)]
+
+        df_runs_to_come = temp_df['runs_remaining']/temp_df['total_runs']
+        df_300_plus_runs_to_come = temp_df_300_plus['runs_remaining']/temp_df_300_plus['total_runs']
+
+        #print(f"{df_runs_to_come.shape = }, {df_300_plus_runs_to_come.shape = }")
+
+        y_val_dl_observed.append(ball/300 if ball > 290 else df_runs_to_come.mean())
+        y_val_dls_observed.append(ball/300 if ball > 285 else df_300_plus_runs_to_come.mean())
+
+        y_val_dl.append(Z_std_u_w(Z_std_params, ball/6, 0)/Z_std_u_w(Z_std_params, 50, 0))
+        y_val_dls.append(Z_dls(Z_dls_params,Z_std_params, ball/6, 0, lambda_val)/Z_dls(Z_dls_params, Z_std_params, 50, 0, lambda_val))
+
+    
     plt.figure(figsize=(10, 6))
+    plt.plot(x_val, y_val_dl_observed, color = 'red', linestyle='-', markersize = 2, marker = 's', linewidth=0.5,label='All ODI Matches [Avg 218]')
+    plt.plot(x_val, y_val_dls_observed, color = 'blue', linestyle='-', markersize = 2, marker = 'o', linewidth = 0.5, label = 'High Scoring(300+) ODI Matches[Avg 330]')
 
-    plt.plot(x1, y1, label='dls_pred  ')
-    plt.plot(x2, y2, label='dl_pred  ')
-    plt.scatter(x3, y3, label='Avg_325 ', marker='o')
-    plt.scatter(x4, y4, label='Avg_250', marker='o')
-
-    # Adding labels and legend
-    plt.xlabel('X-axis')
-    plt.ylabel('Y-axis')
-    plt.title('Plot of Four Lists of (Y, X) Pairs')
+    plt.plot(x_val, y_val_dl, color = 'red', label = 'Base DL(for score of 218)')
+    plt.plot(x_val, y_val_dls, color = 'blue', label = 'DLS (for score of 330)')
+    plt.plot(x_val, y_val_runrate, color = 'black', linestyle='--', label = 'Average Run Rate Line')
     plt.legend()
-    plt.savefig('plot.png', format='png', dpi=300)
-    # Show the plot
+    plt.savefig('observed_vs_predicted.png',dpi=300)
+
+
+def plot_resource_remaining(Z_std_params, Z_dls_params):
+
+    z_std_resource_avail = [[] for _ in range(10)]
+    z_dls_val_resource_avail = [[] for _ in range(10)]
+
+    lambda_val = calculate_lambda(Z_std_params, 350)
+    x_val = list(range(51))  
+
+    for overs_used in range(51):
+        for wickets_down in range(10):
+            std_res =  Z_std_u_w(Z_std_params, 50 - overs_used, wickets_down) / Z_std_u_w(Z_std_params, 50, 0) 
+            dls_res = Z_dls(Z_dls_params, Z_std_params,  50 - overs_used, wickets_down, lambda_val) / Z_dls(Z_dls_params, Z_std_params,  50, 0, lambda_val)
+            z_std_resource_avail[wickets_down].append(std_res)
+            z_dls_val_resource_avail[wickets_down].append(dls_res)
+
+    plt.figure(figsize=(12, 8))
+    for i in range(10):
+        x,  = plt.plot(x_val, z_std_resource_avail[i],  linestyle='--', linewidth=1.5, color = 'red')
+        y,  = plt.plot(x_val, z_dls_val_resource_avail[i],  linestyle='-', linewidth=1.5, color = 'blue')
+
     
-        
+
+    plt.xlabel('Overs used')
+    plt.ylabel('Percentage of resources remaining')
+    plt.title('Resource Availability by Wickets (Standard and DLS)')
+    plt.legend([x, y], ['DL-STD', 'DLS'])
+    plt.grid(True)
+    plt.savefig('resource_remaining.png',dpi=300)
+
+    # plt.figure(figsize=(10,6))
+    # plt.plot(x_val, z_std_resource_avail[9])
+    # plt.plot(x_val, z_dls_val_resource_avail[9])
+    # plt.grid(True)
+    # plt.show()
+
+
+if __name__ == '__main__':
+
+    path='../data/modified_ODI_data.csv'
+
+    data = load_data(path)
+
+    print(f"{data.shape = }")
+
+    # over_data = data.groupby(['match_id','innings','over']).last().reset_index()
+    # over_data['over'] = over_data['over'] + 1
+
+    # print(f"{over_data.shape = }")
+
+    Z_std_params = 1.995e+02 , 3.159e-02 , -1.196e-01,  -1.748e-03 , 3.840e-04
+
+    Z_dls_params = 3.216e-01 , -4.633e+00,  3.518e-02 , -2.623e-01
+
+
+    # Z_std_params = 2.045e+02, 3.159e-02, -1.196e-01, -1.748e-03,  3.840e-04
+    # Z_dls_params = 3.124e-01, -5.117e+00, 4.113e-02, 5.560e-02
+
+    plot_observed_vs_predicted(data, Z_std_params, Z_dls_params)
+
+    plot_resource_remaining(Z_std_params, Z_dls_params)
+
+
+
+
+
+
+    

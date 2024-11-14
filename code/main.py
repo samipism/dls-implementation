@@ -86,6 +86,8 @@ def calculate_loss(params, data):
     return total_loss / count
 
 
+
+
 def lmda_equation(x, params, team1_score):
 
     G_50, b, a1, a2, a3 = params
@@ -117,7 +119,7 @@ if __name__ == '__main__':
     print(f"{cleaned_data.shape = }")
 
     #bounds = [(200, None), (1e-3, None),(1e-3, None),(1e-3, None),(1e-3, None)]
-    initial_guess = [200,0.1,0.1,0.1,0.1]
+    initial_guess = [250,0.5,0.5,0.5,0.5]
 
     result = minimize(calculate_loss, initial_guess, args = cleaned_data, method='L-BFGS-B')
     print(f"{result = }")     
