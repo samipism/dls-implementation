@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, roc_auc_score
-import joblib
+import pickle
 
 df = pd.read_csv("../data/04_cricket_1999to2011.csv")
 
@@ -46,7 +46,8 @@ y_pred = model.predict(X_test)
 
 accuracy = accuracy_score(y_test, y_pred)
 
-joblib.dump(model, "model.joblib")
+with open('model.pkl','wb') as f:
+    pickle.dump(model,f)
 
 
 

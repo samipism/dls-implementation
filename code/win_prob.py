@@ -1,7 +1,9 @@
-import joblib
+import pickle
 import pandas as pd
+import numpy
 
-model = joblib.load("model.joblib")
+with open('model.pkl', 'rb') as f:
+    model = pickle.load(f)
 
 def win_predictor(team1_score, team2_wickets_down, team2_overs_completed, team2_score):
     # team1_score = 309
