@@ -18,10 +18,10 @@ def inference_std(Z_std_params, team1_score, team2_wicktes_down, team2_overs_com
     team2_target = None
 
     if R_2 <= R_1:
-        print(f"Condition satisfied: R_2 <= R_1")
+        # print(f"Condition satisfied: R_2 <= R_1")
         team2_target = team1_score * R_2/R_1
     else:
-        print(f"Condition satisfied: R_2 > R_1")
+        # print(f"Condition satisfied: R_2 > R_1")
         team2_target = team1_score + G_50*(R_2 - R_1)
 
     return int(np.ceil(team2_target))
