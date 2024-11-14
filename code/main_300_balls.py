@@ -11,7 +11,7 @@ def load_data(path):
 
 def preprocess_data(data):
     data = data.copy()
-    data = data[(data['season'] >= 2000) & (data['season'] <= 2011)]
+    data = data[(data['season'] >= 2000) & (data['season'] <= 2012)]
     filtered_columns = ['innings','balls_remaining', 'wickets_down','runs_remaining']
     data = data[filtered_columns]
     data.dropna(inplace=True, axis=0)
@@ -56,6 +56,12 @@ def calculate_loss(params, data):
 
     return total_loss / count
 
+# def calc_loss_fast(params, cleaned_data):
+#     pred = Z_std_u_w(params, cleaned_data['balls_remaining'].values, \
+#           cleaned_data['wickets_down'].values)
+#     loss = np.sum((pred - cleaned_data["runs_remaining"])**2)/cleaned_data.shape[0]
+#     return loss
+
 
 def g_equation(params, lmda):
     c1, c2, c3, c4 = params
@@ -96,6 +102,6 @@ if __name__ == '__main__':
     #bounds = [(200, None), (1e-3, None),(1e-3, None),(1e-3, None),(1e-3, None)]
     initial_guess = [200,.1,.1,.1,.1]
 
-    result = minimize(calculate_loss, initial_guess, args = cleaned_data, method='L-BFGS-B')
+    result = minimize(calculate_loss, initial_guess, args = cleaned_data, method='TNC')
     print(f"{result = }")     
 

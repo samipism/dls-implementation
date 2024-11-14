@@ -44,16 +44,21 @@ y_prob = model.predict_proba(X_test)[:, 1]
 y_pred = model.predict(X_test)
 
 accuracy = accuracy_score(y_test, y_pred)
-# print(f"Accuracy: {accuracy:.2f}")
-# result_df = pd.DataFrame({'Actual': y_test, 'Predicted_Probability': y_prob})
-# print(result_df.head())
 
-# Inference data
+
+
+team1_score = 270
+team2_wicktes_down = 4
+team2_overs_completed = 24
+lost_overs_due_to_rain = 10
+team2_score = 146
+
+# Input Mode-1 for checking if it works
 new_data = pd.DataFrame({
-    'Overs.Remaining': [20],
-    'Wickets.in.Hand': [8],
-    'Run.Rate': [8],
-    'Run.Rate.Required': [7]
+    'Overs.Remaining': [50-team2_overs_completed],
+    'Wickets.in.Hand': [10-team2_wicktes_down],
+    'Run.Rate': [team2_score/team2_overs_completed],
+    'Run.Rate.Required': [(team1_score - team2_score)/(50-team2_overs_completed)]
 })
 
 # Predict win probability
