@@ -12,14 +12,13 @@ def load_data(path):
 
 
 def preprocess_data(data, params):
-    data = data[(data['total_runs'] > 300) & data['innings'] == 1 ]
-    data = data[(data['runs_remaining'] >= 0) & (data['wickets_down'] <= 10)]
+    # data = data[(data['target_score'] >290)]
+    data = data[(data['season'] >= 2010) & (data['season'] <= 2015)]
+    data = data[(data['total_runs'] > 300) | (data['target_score'] >300) ]
     data = data.copy()
-    # data['Overs.Remaining'] = 50 - data['Over']
-    # data['wickets_down'] = 10 - data['Wickets.in.Hand']
-    # runs = np.where(data['innings'] == 1,data['total_runs'], data['Target.Score'] - 1)   
+    runs = np.where(data['innings'] == 1,data['total_runs'], data['target_score'] - 1)  
     lambdas = []
-    for i in data['total_runs'].array:
+    for i in runs:
         lambdas.append(calculate_lambda(params, i))
     data['match_factor'] =lambdas
     # print(data)
