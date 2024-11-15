@@ -5,11 +5,7 @@ from scipy.optimize import minimize, root_scalar
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
-def load_data(path):
-    df = pd.read_csv(path)
-    return df
-
+from main import load_data
 
 def preprocess_data(data, params):
     # data = data[(data['target_score'] >290)]
