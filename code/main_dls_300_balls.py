@@ -30,48 +30,6 @@ def preprocess_data(data, params):
     return data
 
 
-# def Z_std_u_w(params, u, w):
-#     G_50, b, a1, a2, a3 = params
-
-#     Z_0 = G_50/(1 - np.exp(-50*b))
-#     F_w = 1 + a1*w + a2 * (w**2) + a3 * (w**3)
-
-#     Z_std = Z_0 * F_w * (1 - np.exp((-u*b)/F_w))
-
-#     return Z_std 
-
-
-# def Z_pro_u_w(params, u, w, lmda):
-#     G_50, b, a1, a2, a3 = params
-
-#     n0 = 5
-
-#     Z_0 = G_50/(1 - np.exp(-50*b))
-#     F_w = 1 + a1*w + a2 * (w**2) + a3 * (w**3)
-
-#     n_w = n0 * F_w
-
-#     return Z_0 * F_w * (lmda**(n_w+1)) * (1 - np.exp((-u*b)/(F_w * (lmda**n_w)))) 
-
-# def Z_dls(params, args, u, w, lmbda):
-#     c1, c2, c3, c4 = params
-#     G_50, b, a1, a2, a3 = args
-    
-#     Z_0 = G_50/(1-np.exp(-50*b))
-#     F_w = 1 + a1*w + a2*(w**2) + a3*(w**3)
-#     n_w = 5 * F_w
-
-#     alpha = -1 / (1+c1*(lmbda-1)*np.exp(-c2*(lmbda-1)))
-#     beta = -c3*(lmbda-1)*np.exp(-c4*(lmbda-1))
-#     g_u_lmbda = np.power(u/50, -(1+alpha+beta*u))
-#     # print("In Z_dls")
-#     # print(lmbda.shape)
-#     # print(f"In Z_Dls {params=}, {args=}, {Z_0=}, {u=}, {w=}, {lmbda=},{g_u_lmbda=}, {n_w=}, {(-u*b*g_u_lmbda)/(F_w * (lmbda**n_w))}")
-#     # print("pred", Z_0 * F_w * (lmbda**(n_w+1)) * (1-np.exp((-u*b*g_u_lmbda)/F_w * (lmbda**n_w))))
-
-#     return Z_0 * F_w * (lmbda**(n_w+1)) * (1-np.exp((-u*b*g_u_lmbda)/(F_w * (lmbda**n_w))))
-
-
 def calculate_loss1(params, args, data):
     total_loss = 0
     count = 0
@@ -96,50 +54,6 @@ def calculate_loss1(params, args, data):
                 total_loss += np.mean(loss)
         
     return total_loss/count
-
-            # if temp_data.shape[0] > 0:
-            #     for index, row in temp_data.iterrows():
-        
-            #         overs_remaining = row['Overs.Remaining']
-            #         wickets_down = row['Wickets.Down']
-            #         runs_remaining = row['Runs.Remaining']
-
-            #         runs = row['Innings.Total.Runs'] if row['Innings'] == 1 else row['Target.Score'] - 1
-
-            #         lmbda = calculate_lambda(args, runs)
-            #         # print(lmbda)
-
-            #         # Calculate the loss for each row using Z_dls function
-            #         predicted_value = Z_dls(params, args, overs_remaining, wickets_down, lmbda)
-            #         loss += (runs_remaining - predicted_value) ** 2
-            #         count += 1
-
-    #return loss / count 
-
-
-
-
-# def equation(x, params, team1_score):
-
-#     G_50, b, a1, a2, a3 = params
-
-#     u, w, n0 = 50, 0, 5
-
-#     Z_0 = G_50/(1 - np.exp(-50*b))
-#     F_w = 1 + a1*w + a2 * (w**2) + a3 * (w**3)
-
-#     n_w = n0 * F_w
-
-#     return Z_0 * F_w * (x**(n_w+1)) * (1 - np.exp((-u*b)/(F_w * (x**n_w)))) - team1_score
-
-
-# def calculate_lambda(params, team1_score):
-
-#     solution = root_scalar(lambda x: equation(x, params, team1_score), bracket=[1,100])
-
-#     return solution.root
-
-    
 
 
 if __name__ == '__main__':

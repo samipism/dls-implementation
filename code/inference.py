@@ -61,16 +61,15 @@ if __name__ == '__main__':
     # Z_std_params = [ 2.468e+02 , 1.253e-02, -1.391e-01 , 5.942e-03 ,-2.945e-05]
 
     Z_dls_params = 3.216e-01 , -4.633e+00,  3.518e-02 , -2.623e-01
-
     Z_std_params = 1.995e+02 , 3.159e-02 , -1.196e-01,  -1.748e-03 , 3.840e-04
-    #Z_std_params = 2.045e+02, 3.159e-02, -1.196e-01, -1.748e-03,  3.840e-04
+    
 
     # ODI Scenario
     print("\nODI Scenario: ")
-    team1_score = 309
+    team1_score = 350
     team2_wicktes_down = 2
-    team2_overs_completed = 20.4
-    lost_overs_due_to_rain = 50-20.4
+    team2_overs_completed = 10
+    lost_overs_due_to_rain = 5
 
     print("\nDL-STD: ",inference_ODI(Z_dls_params, Z_std_params, team1_score, team2_wicktes_down, team2_overs_completed, lost_overs_due_to_rain, method='DL-STD'))
     print("\nDL-PRO: ",inference_ODI(Z_dls_params, Z_std_params, team1_score, team2_wicktes_down, team2_overs_completed, lost_overs_due_to_rain, method='DL-PRO'))

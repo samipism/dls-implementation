@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from main import calculate_lambda, Z_dls, Z_std_u_w, load_data
+from main import calculate_lambda, Z_dls, Z_std_u_w,Z_pro_u_w, load_data
 
 
 
@@ -23,6 +23,7 @@ def plot_observed_vs_predicted(data, Z_std_params, Z_dls_params):
     y_val_dls_observed = []
     y_val_dl = []
     y_val_dls = []
+    # y_val_pro = []
     y_val_runrate = []
     
 
@@ -33,7 +34,7 @@ def plot_observed_vs_predicted(data, Z_std_params, Z_dls_params):
         x_val.append(ball)
 
         temp_df = df[(df['balls_remaining'] == ball ) & (df['wickets_down'] == 0)]
-        temp_df_300_plus = df_300_plus[(df_300_plus['balls_remaining'] == ball ) & (df_300_plus['wickets_down'] == 0)]
+        temp_df_300_plus = df_300_plus[(df_300_plus['balls_remaining'] == ball) & (df_300_plus['wickets_down'] == 0)]
 
         df_runs_to_come = temp_df['runs_remaining']/temp_df['total_runs']
         df_300_plus_runs_to_come = temp_df_300_plus['runs_remaining']/temp_df_300_plus['total_runs']
@@ -45,7 +46,7 @@ def plot_observed_vs_predicted(data, Z_std_params, Z_dls_params):
 
         y_val_dl.append(Z_std_u_w(Z_std_params, ball/6, 0)/Z_std_u_w(Z_std_params, 50, 0))
         y_val_dls.append(Z_dls(Z_dls_params,Z_std_params, ball/6, 0, lambda_val)/Z_dls(Z_dls_params, Z_std_params, 50, 0, lambda_val))
-
+        #y_val_pro.append(Z_pro_u_w(Z_std_params, ball/6, 0, lambda_val)/Z_pro_u_w(Z_std_params, 50, 0, lambda_val))
     
     plt.figure(figsize=(10, 6))
     plt.plot(x_val, y_val_dl_observed, color = 'red', linestyle='-', markersize = 2, marker = 's', linewidth=0.5,label='All ODI Matches [Avg 218]')
@@ -54,6 +55,10 @@ def plot_observed_vs_predicted(data, Z_std_params, Z_dls_params):
     plt.plot(x_val, y_val_dl, color = 'red', label = 'Base DL(for score of 218)')
     plt.plot(x_val, y_val_dls, color = 'blue', label = 'DLS (for score of 330)')
     plt.plot(x_val, y_val_runrate, color = 'black', linestyle='--', label = 'Average Run Rate Line')
+    # plt.plot(x_val, y_val_pro, color = 'green', label = 'DL Pro(for score of 330)')
+
+    plt.xlabel('Balls Remaining')
+    plt.ylabel('Proportion of Runs To Come')
     plt.legend()
     plt.savefig('observed_vs_predicted.png',dpi=300)
 
@@ -63,7 +68,7 @@ def plot_resource_remaining(Z_std_params, Z_dls_params):
     z_std_resource_avail = [[] for _ in range(10)]
     z_dls_val_resource_avail = [[] for _ in range(10)]
 
-    lambda_val = calculate_lambda(Z_std_params, 350)
+    lambda_val = calculate_lambda(Z_std_params, 300)
     x_val = list(range(51))  
 
     for overs_used in range(51):
