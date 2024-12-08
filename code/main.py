@@ -7,16 +7,26 @@ from Utils.Plot import Graph
 
 if __name__ == '__main__':
 
-    data_ob = Dataloader()
 
-    dl_std = DL_Standard(data_ob)
-    dl_pro = DL_Professional(data_ob)
-    dl_stern = DL_Stern(data_ob)
 
-    graph = Graph(data_ob, dl_std, dl_pro, dl_stern)
+    dummy_t20_datapath = '../data/dummy_t20_data.csv'
+    dummy_odi_datapath = '../data/dummy_odi_data.csv'
 
-    graph.plot_observed_vs_predicted()
-    graph.plot_resource_remaining()
+    data_ob = Dataloader(dummy_t20_datapath, dummy_odi_datapath)
+    dl_pro_ob = DL_Professional(data_ob)
+    dl_stern_ob = DL_Stern(data_ob)
+
+
+    # data_ob = Dataloader()
+
+    # dl_std = DL_Standard(data_ob)
+    # dl_pro = DL_Professional(data_ob)
+    # dl_stern = DL_Stern(data_ob)
+
+    # graph = Graph(data_ob, dl_std, dl_pro, dl_stern)
+
+    # graph.plot_observed_vs_predicted()
+    # graph.plot_resource_remaining()
 
 
     # # ODI Scenario
