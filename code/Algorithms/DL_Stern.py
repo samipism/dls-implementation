@@ -7,12 +7,12 @@ from Algorithms.DL_Professional import DL_Professional
 
 class DL_Stern(DL_Professional):
 
-    def __init__(self, data_ob, c1=3.216e-01 , c2=-4.633e+00,  c3=3.518e-02 , c4=-2.623e-01):
+    def __init__(self, data_ob, G_50=2.045e+02, b=3.159e-02, a1=-1.196e-01, a2=-1.748e-03,  a3=3.840e-04, c1=3.216e-01 , c2=-4.633e+00,  c3=3.518e-02 , c4=-2.623e-01):
         self.c1 = c1 
         self.c2 = c2 
         self.c3 = c3 
         self.c4 = c4
-        super().__init__(data_ob)
+        super().__init__(data_ob, G_50, b, a1, a2, a3)
 
     def filter_data(self, data_ob):
         data = data_ob.odi_data.copy()
@@ -66,7 +66,7 @@ class DL_Stern(DL_Professional):
         self.data['Z_dls'] = Z_0 * self.data['F_w'] * (lambda_val ** (self.data['n_w'] + 1)) * (
             1 - np.exp(-self.b * u * g_u_lambda / (self.data['F_w'] * (lambda_val ** self.data['n_w'])))
         )
-        self.data['loss'] = (self.data['runs_remaining'] - self.data['predicted_value'])**2
+        self.data['loss'] = (self.data['runs_remaining'] - self.data['Z_dls'])**2
 
         return self.data['loss'].mean()
     
